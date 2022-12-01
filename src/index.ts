@@ -1,7 +1,11 @@
+import * as dotenv from 'dotenv'
+
 import express, { NextFunction, Request, Response } from 'express'
 import { json, urlencoded } from 'body-parser'
 
 import { router } from './routes'
+
+dotenv.config()
 
 const app = express()
 
