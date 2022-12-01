@@ -1,0 +1,9 @@
+{
+  "name": "toiki",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "repository": "https://github.com/LucasVinicius314/toiki.git",
+  "author": "Lucas Coelho <58010418+LucasVinicius314@users.noreply.github.com>",
+  "license": "MIT",
+  "private": false
+}
