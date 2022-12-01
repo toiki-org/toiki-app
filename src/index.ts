@@ -1,37 +1,27 @@
-import { SpotifyService } from './services/SpotifyService'
-import { YouTubeService } from './services/YouTubeService'
+import express, { NextFunction, Request, Response } from 'express'
+import { json, urlencoded } from 'body-parser'
 
-const authenticationSpotifyService = new SpotifyService(undefined)
-const youTubeService = new YouTubeService()
+import { router } from './routes'
 
-const main = async () => {
-  const accessToken = await authenticationSpotifyService.getAppAccessToken()
+const app = express()
 
-  const spotifyService = new SpotifyService(accessToken)
+app.use(json())
+app.use(urlencoded({ extended: true }))
 
-  const spotifyTrackUrl = ''
+app.get('/', (req, res) => {
+  res.status(200).send('Server running.')
+})
 
-  const [_, spotifyTrackId] = spotifyTrackUrl.match(
-    /^https:\/\/.*\/track\/(\w+)/
-  ) ?? [undefined, undefined]
+app.use('/api/', router)
 
-  if (spotifyTrackId === undefined) {
-    throw new Error('Invalid Spotify track url.')
-  }
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err)
 
-  const spotifyTrack = await spotifyService.getTrackInfo(spotifyTrackId)
+  res.status(404).json({
+    message: err.toString(),
+  })
+})
 
-  const youTubeVideo = await youTubeService.searchVideoId(spotifyTrack.name)
-
-  const youTubeVideoId = youTubeVideo?.videoId
-
-  if (youTubeVideoId === undefined || youTubeVideoId === null) {
-    throw new Error('YouTube video not found.')
-  }
-
-  const youTubeVideoUrl = `https://www.youtube.com/watch?v=${youTubeVideo?.videoId}`
-
-  console.log(youTubeVideoUrl)
-}
-
-main()
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`)
+})
