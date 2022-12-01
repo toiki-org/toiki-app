@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "esModuleInterop": true,
     "lib": ["ES2020"],
     "moduleResolution": "Node",
     "outDir": "build/",

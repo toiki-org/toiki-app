@@ -8,9 +8,11 @@
   "private": false,
   "dependencies": {
     "google-auth-library": "^8.7.0",
-    "googleapis": "^109.0.1"
+    "googleapis": "^109.0.1",
+    "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
-    "@types/node": "^18.11.10"
+    "@types/node": "^18.11.10",
+    "@types/spotify-web-api-node": "^5.0.7"
   }
 }

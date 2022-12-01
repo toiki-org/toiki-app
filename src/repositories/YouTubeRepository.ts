@@ -9,6 +9,7 @@ export class YouTubeRepository {
         auth: process.env.YOUTUBE_API_KEY,
         part: ['snippet'],
         q: query,
+        maxResults: 1,
       })
       .then((v) => v.data.items ?? [])
   }
