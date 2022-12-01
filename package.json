@@ -5,5 +5,12 @@
   "repository": "https://github.com/LucasVinicius314/toiki.git",
   "author": "Lucas Coelho <58010418+LucasVinicius314@users.noreply.github.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "google-auth-library": "^8.7.0",
+    "googleapis": "^109.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.10"
+  }
 }
