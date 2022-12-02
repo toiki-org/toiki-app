@@ -1,7 +1,6 @@
 import * as yup from 'yup'
 
-import { Request, Router } from 'express'
-
+import { Router } from 'express'
 import { SpotifyService } from '../services/SpotifyService'
 import { YouTubeService } from '../services/YouTubeService'
 
