@@ -7,7 +7,8 @@
     {
       "name": "app",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": ["-d", "chrome", "--web-port", "60852"]
     },
     {
       "name": "app (profile mode)",

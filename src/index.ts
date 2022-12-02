@@ -12,8 +12,17 @@ const app = express()
 app.use(json())
 app.use(urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-  res.status(200).send('Server running.')
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', [process.env.HOST_URL ?? ''])
+  res.setHeader('Content-Type', 'application/json')
+
+  next()
+})
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    message: 'Server running.',
+  })
 })
 
 app.use('/api/', router)
