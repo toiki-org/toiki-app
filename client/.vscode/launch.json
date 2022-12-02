@@ -5,19 +5,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "app",
+      "name": "Toiki",
       "request": "launch",
       "type": "dart",
       "args": ["-d", "chrome", "--web-port", "60852"]
     },
     {
-      "name": "app (profile mode)",
+      "name": "Toiki (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "app (release mode)",
+      "name": "Toiki (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

@@ -13,6 +13,7 @@ class App extends StatelessWidget {
       child: BlocProviders(
         child: MaterialApp(
           title: Constants.appName,
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(primarySwatch: Colors.red),
           routes: {
             MainScreen.route: (context) => MainScreen(),

@@ -54,7 +54,10 @@ class MainScreen extends StatelessWidget {
                     enabled: !isLoading,
                     focusNode: _focusNode,
                     controller: _controller,
-                    decoration: const InputDecoration(labelText: 'Url'),
+                    decoration: const InputDecoration(
+                      labelText: 'Url',
+                      alignLabelWithHint: true,
+                    ),
                     onFieldSubmitted: (value) {
                       BlocProvider.of<ConversionBloc>(context)
                           .add(ConvertUrlConversionEvent(url: value));
@@ -82,6 +85,7 @@ class MainScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 64),
                       child: Center(
                         child: IconButton(
+                          tooltip: 'Copy',
                           icon: const Icon(Icons.copy),
                           onPressed: () {
                             _copy(text: state.url, context: context);
