@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:toiki/core/bloc_providers.dart';
+import 'package:toiki/core/repository_providers.dart';
+import 'package:toiki/screens/main_screen.dart';
 import 'package:toiki/utls/constants.dart';
 
 class App extends StatelessWidget {
@@ -8,8 +9,16 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: Constants.appName,
+    return RepositoryProviders(
+      child: BlocProviders(
+        child: MaterialApp(
+          title: Constants.appName,
+          theme: ThemeData(primarySwatch: Colors.red),
+          routes: {
+            MainScreen.route: (context) => MainScreen(),
+          },
+        ),
+      ),
     );
   }
 }

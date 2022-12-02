@@ -10,7 +10,7 @@ const youTubeService = new YouTubeService()
 
 export const router = Router()
 
-router.get('/convert', async (req, res, next) => {
+router.get('/convert-url', async (req, res, next) => {
   const isValid = await yup
     .object()
     .shape({
