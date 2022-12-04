@@ -1,0 +1,73 @@
+name: CD
+
+on:
+  push
+  # Android builds disabled for now
+  # push:
+  #   tags:
+  #     - "v**.**.**" # on every version tag will build a new android artifact.
+jobs:
+  build:
+    name: Build Web and Android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "2.2.3"
+
+      - name: Pub Get Packages
+        run: flutter pub get
+
+      # Android builds disabled for now
+      # - name: Build APK
+      #   run: flutter build apk --release
+
+      - name: Build Web
+        run: flutter build web --release
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: web
+          path: build/web/*
+
+      # Android builds disabled for now
+      # - name: Create Github Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "build/app/outputs/apk/release/*.apk"
+  deploy:
+    needs: [build]
+    name: Deploy Web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: web
+
+      - name: Zip build files
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -r web.zip ./
+
+      - run: pwd
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-2
+          aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Copy build files to S3
+        run: |
+          aws s3 cp web.zip s3://${{ secrets.AWS_BUCKET }}/
