@@ -12,7 +12,9 @@ ARG S3_WEB_OBJECT
 
 ADD $S3_WEB_OBJECT public
 
-RUN unzip public/web.zip
+WORKDIR /usr/src/app/public
+
+RUN unzip web.zip
 
 EXPOSE 80
 
