@@ -35,7 +35,7 @@ jobs:
 
       - name: Build Web
         working-directory: ./client
-        run: flutter build web --release
+        run: flutter build web --release --dart-define API_AUTHORITY=${{ secrets.API_AUTHORITY }}
 
       - uses: actions/upload-artifact@v2
         with:
