@@ -26,6 +26,7 @@ jobs:
           flutter-version: "2.2.3"
 
       - name: Pub Get Packages
+        working-directory: ./client
         run: flutter pub get
 
       # Android builds disabled for now
@@ -33,12 +34,13 @@ jobs:
       #   run: flutter build apk --release
 
       - name: Build Web
+        working-directory: ./client
         run: flutter build web --release
 
       - uses: actions/upload-artifact@v2
         with:
           name: web
-          path: build/web/*
+          path: client/build/web/*
 
       # Android builds disabled for now
       # - name: Create Github Release
