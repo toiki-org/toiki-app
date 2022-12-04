@@ -8,7 +8,11 @@ RUN yarn global add typescript
 
 RUN yarn install
 
-ADD https://toiki-bucket.s3.us-east-2.amazonaws.com/web.zip public
+ARG S3_WEB_OBJECT
+
+ADD $S3_WEB_OBJECT public
+
+RUN unzip public/web.zip
 
 EXPOSE 80
 
