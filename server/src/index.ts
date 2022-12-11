@@ -12,8 +12,6 @@ const app = express()
 app.use(json())
 app.use(urlencoded({ extended: true }))
 
-app.use(express.static('public'))
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', [process.env.HOST_URL ?? ''])
   res.setHeader('Content-Type', 'application/json')
