@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+
+  toiki_backend:
+    container_name: toiki_backend
+    image: ghcr.io/LucasVinicius314/toiki-backend:staging
+    restart: unless-stopped
+    env_file: server/.env
+    networks:
+      - toiki_net
+
+  toiki_certbot:
+    container_name: toiki_certbot
+    image: ghcr.io/LucasVinicius314/toiki-certbot:staging
+    restart: unless-stopped
+    networks:
+      - toiki_net
+    volumes:
+      - ./nginx/staging/etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/staging/etc/nginx/dhparam:/etc/nginx/dhparam
+      - ./nginx/staging/var/www/_letsencrypt:/var/www/_letsencrypt
+      - ./nginx/staging/var/www/certbot:/var/www/certbot
+    entrypoint: [ "/docker-entrypoint.d/certbot-entrypoint.sh" ]
+
+  toiki_nginx:
+    container_name: toiki_nginx
+    image: ghcr.io/LucasVinicius314/toiki-nginx:staging
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - toiki_backend
+      - toiki_certbot
+    networks:
+      - toiki_net
+    volumes:
+      - ./nginx/staging/etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/staging/etc/nginx/dhparam:/etc/nginx/dhparam
+      - ./nginx/staging/var/www/_letsencrypt:/var/www/_letsencrypt
+      - ./nginx/staging/var/www/certbot:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+
+networks:
+  toiki_net:
+    driver: bridge
