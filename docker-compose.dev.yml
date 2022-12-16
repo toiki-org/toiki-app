@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+
+  toiki_backend:
+    container_name: toiki_backend
+    build:
+      context: server
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    env_file: server/.env
+    volumes:
+      - ./server/:/app/dev:Z
+      - ignore:/app/dev/node_modules
+
+volumes:
+  ignore:

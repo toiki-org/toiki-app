@@ -8,5 +8,8 @@
     "**/Thumbs.db": true,
     "build/**": true,
     "node_modules/**": true
-  }
+  },
+  "cSpell.words": [
+    "toiki"
+  ]
 }
