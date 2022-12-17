@@ -4,7 +4,7 @@ services:
 
   toiki_backend:
     container_name: toiki_backend
-    image: ghcr.io/LucasVinicius314/toiki-backend:staging
+    image: ghcr.io/toiki-org/toiki-backend:staging
     restart: unless-stopped
     env_file: server/.env
     networks:
@@ -12,7 +12,7 @@ services:
 
   toiki_certbot:
     container_name: toiki_certbot
-    image: ghcr.io/LucasVinicius314/toiki-certbot:staging
+    image: ghcr.io/toiki-org/toiki-certbot:staging
     restart: unless-stopped
     networks:
       - toiki_net
@@ -25,7 +25,7 @@ services:
 
   toiki_nginx:
     container_name: toiki_nginx
-    image: ghcr.io/LucasVinicius314/toiki-nginx:staging
+    image: ghcr.io/toiki-org/toiki-nginx:staging
     restart: unless-stopped
     ports:
       - 80:80
