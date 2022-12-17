@@ -82,7 +82,7 @@ jobs:
       - name: Build & Publish toiki-certbot
         uses: docker/build-push-action@v2
         with:
-          tags: ghcr.io/toiki-org/toiki-front:latest
+          tags: ghcr.io/toiki-org/toiki-certbot:latest
           push: true
           context: ./server
           cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-certbot:latest
