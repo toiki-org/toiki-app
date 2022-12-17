@@ -84,7 +84,7 @@ jobs:
         with:
           tags: ghcr.io/toiki-org/toiki-certbot:latest
           push: true
-          context: ./server
+          context: ./certbot
           cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-certbot:latest
           cache-to: type=inline
 
