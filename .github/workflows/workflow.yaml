@@ -21,6 +21,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER=${OWNER_RAW,,}" >>${GITHUB_ENV}
+        env:
+          OWNER_RAW: '${{ github.repository_owner }}'
+
       - name: Build toiki-build
         uses: docker/build-push-action@v2
         with:
@@ -34,28 +40,28 @@ jobs:
       - name: Build & Publish toiki-nginx
         uses: docker/build-push-action@v2
         with:
-          tags: ghcr.io/lucasVinicius314/toiki-nginx:latest
+          tags: ghcr.io/${OWNER}/toiki-nginx:latest
           push: true
           context: ./nginx
-          cache-from: type=registry,ref=ghcr.io/lucasVinicius314/toiki-nginx:latest
+          cache-from: type=registry,ref=ghcr.io/${OWNER}/toiki-nginx:latest
           cache-to: type=inline
 
       - name: Build & Publish toiki-backend
         uses: docker/build-push-action@v2
         with:
-          tags: ghcr.io/lucasVinicius314/toiki-backend:latest
+          tags: ghcr.io/${OWNER}/toiki-backend:latest
           push: true
           context: ./server
-          cache-from: type=registry,ref=ghcr.io/lucasVinicius314/toiki-backend:latest
+          cache-from: type=registry,ref=ghcr.io/${OWNER}/toiki-backend:latest
           cache-to: type=inline
 
       - name: Build & Publish toiki-certbot
         uses: docker/build-push-action@v2
         with:
-          tags: ghcr.io/lucasVinicius314/toiki-front:latest
+          tags: ghcr.io/${OWNER}/toiki-front:latest
           push: true
           context: ./server
-          cache-from: type=registry,ref=ghcr.io/lucasVinicius314/toiki-certbot:latest
+          cache-from: type=registry,ref=ghcr.io/${OWNER}/toiki-certbot:latest
           cache-to: type=inline
 
   deploy:
