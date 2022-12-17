@@ -1,5 +1,7 @@
 name: Build & Deploy
 
+concurrency: build_or_test
+
 on:
   push:
     branches:

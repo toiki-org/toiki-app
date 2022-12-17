@@ -1,5 +1,7 @@
 name: Test
 
+concurrency: build_or_test
+
 on:
   push:
     branches:
