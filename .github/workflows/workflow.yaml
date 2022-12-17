@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Prune old docker images
+      - name: Git pull
         uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
           command: cd toiki && git pull origin feat/restructure
@@ -103,16 +103,12 @@ jobs:
           privateKey: ${{ secrets.PRIVATE_KEY }}
 
       - name: Docker compose up
-        uses: TapTap21/docker-remote-deployment-action@v1.1
+        uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
-          remote_docker_host: ${{ secrets.USERNAME }}@${{ secrets.HOST }}
-          ssh_public_key: ${{ secrets.PUBLIC_KEY }}
-          ssh_private_key: ${{ secrets.PRIVATE_KEY }}
-          args: up -d
-          docker_login_user: ${{ github.actor }}
-          docker_login_password: ${{ secrets.GITHUB_TOKEN }}
-          docker_login_registry: ghcr.io
-          stack_file_name: toiki/docker-compose.yml
+          command: cd toiki && docker-compose up --quiet-pull --force-recreate -d
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          privateKey: ${{ secrets.PRIVATE_KEY }}
 
       - name: Prune old docker images
         uses: garygrossgarten/github-action-ssh@v0.6.3
