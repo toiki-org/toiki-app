@@ -20,6 +20,7 @@ jobs:
           tags: toiki-build
           push: false
           context: ./client
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
           cache-to: type=inline
           build-args: |
             ARCH=linux/amd64
@@ -27,9 +28,10 @@ jobs:
       - name: Build server
         uses: docker/build-push-action@v2
         with:
-          tags: toiki-build
+          tags: toiki-server
           push: false
           context: ./server
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-backend:latest
           cache-to: type=inline
 
   build:
@@ -51,9 +53,10 @@ jobs:
       - name: Build toiki-build
         uses: docker/build-push-action@v2
         with:
-          tags: toiki-build
-          push: false
+          tags: toiki-build,ghcr.io/toiki-org/toiki-build:latest
+          push: true
           context: ./client
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
           cache-to: type=inline
           build-args: |
             ARCH=linux/amd64
@@ -109,6 +112,7 @@ jobs:
           docker_login_user: ${{ github.actor }}
           docker_login_password: ${{ secrets.GITHUB_TOKEN }}
           docker_login_registry: ghcr.io
+          stack_file_name: toiki/docker-compose.yml
 
       - name: Prune old docker images
         uses: garygrossgarten/github-action-ssh@v0.6.3
