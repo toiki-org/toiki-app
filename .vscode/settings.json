@@ -10,6 +10,12 @@
     "node_modules/**": true
   },
   "cSpell.words": [
-    "toiki"
+    "certbot",
+    "garygrossgarten",
+    "github",
+    "linux",
+    "lucas",
+    "toiki",
+    "Vinicius"
   ]
 }
