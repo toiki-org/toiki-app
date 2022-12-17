@@ -105,7 +105,7 @@ jobs:
       - name: Docker compose up
         uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
-          command: cd toiki && docker-compose up --quiet-pull --force-recreate -d
+          command: cd toiki && docker-compose pull && docker-compose up --quiet-pull --force-recreate -d
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           privateKey: ${{ secrets.PRIVATE_KEY }}
