@@ -1,4 +1,5 @@
 ARG ARCH=linux/amd64
+ARG API_AUTHORITY
 
 FROM --platform=${ARCH} dart:2.18
 
@@ -16,6 +17,8 @@ RUN flutter pub global activate webdev
 ENV PATH "$PATH:/root/.pub-cache/bin"
 
 WORKDIR /app
+
+ENV API_AUTHORITY=${API_AUTHORITY}
 
 COPY . .
 

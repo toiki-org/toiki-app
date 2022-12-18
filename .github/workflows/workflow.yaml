@@ -24,6 +24,7 @@ jobs:
           cache-to: type=inline
           build-args: |
             ARCH=linux/amd64
+            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
 
       - name: Build server
         uses: docker/build-push-action@v2
@@ -60,6 +61,7 @@ jobs:
           cache-to: type=inline
           build-args: |
             ARCH=linux/amd64
+            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
 
       - name: Build & Publish toiki-nginx
         uses: docker/build-push-action@v2
