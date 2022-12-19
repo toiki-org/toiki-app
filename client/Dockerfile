@@ -19,11 +19,9 @@ ENV PATH "$PATH:/root/.pub-cache/bin"
 
 WORKDIR /app
 
-ENV API_AUTHORITY=${API_AUTHORITY}
-
 COPY . .
 
 RUN flutter pub get
 
 # Build the Flutter application for the web
-RUN flutter build web
+RUN flutter build web --release  --dart-define API_AUTHORITY=${API_AUTHORITY}
