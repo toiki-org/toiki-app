@@ -1,7 +1,8 @@
 ARG ARCH=linux/amd64
-ARG API_AUTHORITY
 
 FROM --platform=${ARCH} dart:2.18
+
+ARG API_AUTHORITY
 
 RUN apt-get update && apt-get install -y unzip wget xz-utils
 
