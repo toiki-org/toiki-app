@@ -14,7 +14,8 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 
 const corsOptions: CorsOptions = {
-  origin: process.env.HOST_URL,
+  origin: true,
+  credentials: true,
   optionsSuccessStatus: 200
 }
 
