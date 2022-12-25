@@ -1,75 +1,121 @@
-name: CD
+name: Test, Build & Deploy
 
 on:
-  push
-  # Android builds disabled for now
-  # push:
-  #   tags:
-  #     - "v**.**.**" # on every version tag will build a new android artifact.
+  push:
+    branches:
+      - "main"
+
 jobs:
-  build:
-    name: Build Web and Android
+
+  test:
+    name: Test docker build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build client
+        uses: docker/build-push-action@v2
+        with:
+          tags: toiki-build
+          push: false
+          context: ./client
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
+          cache-to: type=inline
+          build-args: |
+            ARCH=linux/amd64
+            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
+
+      - name: Build server
+        uses: docker/build-push-action@v2
+        with:
+          tags: toiki-server
+          push: false
+          context: ./server
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-backend:latest
+          cache-to: type=inline
+
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
         with:
           fetch-depth: 0
 
-      - name: Setup Java
-        uses: actions/setup-java@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
         with:
-          java-version: "12.x"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+      - name: Build toiki-build
+        uses: docker/build-push-action@v2
         with:
-          flutter-version: "3.0.5"
+          tags: ghcr.io/toiki-org/toiki-build:latest
+          push: true
+          context: ./client
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
+          cache-to: type=inline
+          build-args: |
+            ARCH=linux/amd64
+            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
 
-      - name: Pub Get Packages
-        working-directory: ./client
-        run: flutter pub get
-
-      # Android builds disabled for now
-      # - name: Build APK
-      #   run: flutter build apk --release
-
-      - name: Build Web
-        working-directory: ./client
-        run: flutter build web --release --dart-define API_AUTHORITY=${{ secrets.API_AUTHORITY }}
-
-      - uses: actions/upload-artifact@v2
+      - name: Build & Publish toiki-nginx
+        uses: docker/build-push-action@v2
         with:
-          name: web
-          path: client/build/web/*
+          tags: ghcr.io/toiki-org/toiki-nginx:latest
+          push: true
+          context: ./nginx
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-nginx:latest
+          cache-to: type=inline
 
-      # Android builds disabled for now
-      # - name: Create Github Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: "build/app/outputs/apk/release/*.apk"
+      - name: Build & Publish toiki-backend
+        uses: docker/build-push-action@v2
+        with:
+          tags: ghcr.io/toiki-org/toiki-backend:latest
+          push: true
+          context: ./server
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-backend:latest
+          cache-to: type=inline
+
+      - name: Build & Publish toiki-certbot
+        uses: docker/build-push-action@v2
+        with:
+          tags: ghcr.io/toiki-org/toiki-certbot:latest
+          push: true
+          context: ./certbot
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-certbot:latest
+          cache-to: type=inline
+
   deploy:
     needs: [build]
-    name: Deploy Web
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+
+      - name: Git pull
+        uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
-          name: web
+          command: cd toiki && git pull origin main
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          privateKey: ${{ secrets.PRIVATE_KEY }}
 
-      - name: Zip build files
-        uses: montudor/action-zip@v1
+      - name: Docker compose up
+        uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
-          args: zip -r web.zip ./
+          command: cd toiki && docker-compose pull && docker-compose up --quiet-pull --force-recreate -d
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          privateKey: ${{ secrets.PRIVATE_KEY }}
 
-      - run: pwd
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Prune old docker images
+        uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
-          aws-region: eu-west-2
-          aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Copy build files to S3
-        run: |
-          aws s3 cp web.zip s3://${{ secrets.AWS_BUCKET }}/
+          command: cd toiki && docker system prune -a -f
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          privateKey: ${{ secrets.PRIVATE_KEY }}

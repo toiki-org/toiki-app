@@ -8,5 +8,18 @@
     "**/Thumbs.db": true,
     "build/**": true,
     "node_modules/**": true
-  }
+  },
+  "cSpell.words": [
+    "certbot",
+    "garygrossgarten",
+    "github",
+    "linux",
+    "lucas",
+    "Regexes",
+    "spotify",
+    "toiki",
+    "Vinicius",
+    "youtube",
+    "Youtube"
+  ]
 }

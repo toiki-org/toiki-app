@@ -19,4 +19,8 @@ export class SpotifyRepository {
   readonly getTrack = async (id: string) => {
     return await this.service.getTrack(id)
   }
+
+  readonly search = async (query: string) => {
+    return await this.service.search(query, ['track'], { limit: 1 })
+  }
 }
