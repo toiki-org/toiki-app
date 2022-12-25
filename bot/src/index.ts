@@ -42,7 +42,7 @@ client.on('ready', () => {
 
       convertUrl(url).then((convertedUrl) => {
         const type = urlMatchResult.type === 'spotify' ? 'youtube' : 'spotify';
-        const adjective = type === 'youtube' ? 'gentlemen' : 'plebs';
+        const adjective = type === 'youtube' ? 'plebs' : 'gentlemen';
         message.reply(
           `Here's a ${type} link for the ${adjective}: ${convertedUrl}`
         );

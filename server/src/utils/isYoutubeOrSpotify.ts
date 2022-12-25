@@ -1,4 +1,4 @@
-export const youtubeRegexes = [/.*(youtu\.be|youtube.com|music.youtube.com)\/watch\?v=(\w+)?(?=(\&|$))/, /.*(youtu\.be|youtube.com)\/(\w+)?(?=(\?|$))/]
+export const youtubeRegexes = [/.*(youtu\.be|youtube.com|music.youtube.com)\/watch\?v=((\w|-)+)?(?=(\&|$))/, /.*(youtu\.be|youtube.com)\/((\w|-)+)?(?=(\?|$))/]
 export const spotifyRegex = /.*open.spotify.com\/track\/(\w+)?(?=\?|$)/
 
 interface Match {
