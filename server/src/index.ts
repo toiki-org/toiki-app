@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv'
 
 import express, { NextFunction, Request, Response } from 'express'
 import { json, urlencoded } from 'body-parser'
+import cors, { CorsOptions } from 'cors';
 
 import { router } from './routes'
 
@@ -12,8 +13,14 @@ const app = express()
 app.use(json())
 app.use(urlencoded({ extended: true }))
 
+const corsOptions: CorsOptions = {
+  origin: process.env.HOST_URL,
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions))
+
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', [process.env.HOST_URL ?? ''])
   res.setHeader('Content-Type', 'application/json')
 
   next()
