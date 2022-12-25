@@ -2,6 +2,14 @@ version: "3.7"
 
 services:
 
+  toiki_bot:
+    container_name: toiki_bot
+    image: ghcr.io/toiki-org/toiki-bot:latest
+    restart: unless-stopped
+    env_file: bot/.env
+    networks:
+      - toiki_net
+
   toiki_backend:
     container_name: toiki_backend
     image: ghcr.io/toiki-org/toiki-backend:latest
