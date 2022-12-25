@@ -1,12 +1,10 @@
-import * as dotenv from 'dotenv'
+import 'dotenv/config'
 
 import express, { NextFunction, Request, Response } from 'express'
 import { json, urlencoded } from 'body-parser'
-import cors, { CorsOptions } from 'cors';
+import cors, { CorsOptions } from 'cors'
 
 import { router } from './routes'
-
-dotenv.config()
 
 const app = express()
 

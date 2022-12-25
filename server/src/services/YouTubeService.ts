@@ -12,4 +12,14 @@ export class YouTubeService {
 
     return res[0].id
   }
+
+  readonly getTrackInfo = async (id: string) => {
+    const res = await this.repository.getTrack(id)
+
+    if (res.length === 0) {
+      return undefined
+    }
+
+    return res[0]
+  }
 }

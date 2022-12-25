@@ -13,4 +13,14 @@ export class YouTubeRepository {
       })
       .then((v) => v.data.items ?? [])
   }
+
+  readonly getTrack = async (id: string) => {
+    return await this.service.search.list({
+      auth: process.env.YOUTUBE_API_KEY,
+      part: ['snippet'],
+      q: id,
+      maxResults: 1,
+    })
+    .then((v) => v.data.items ?? [])
+  }
 }

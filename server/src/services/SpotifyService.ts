@@ -13,6 +13,12 @@ export class SpotifyService {
     return res.body.access_token
   }
 
+  readonly searchVideoId = async (query: string) => {
+    const res = await this.repository.search(query)
+
+    return res.body
+  }
+
   readonly getTrackInfo = async (id: string) => {
     const res = await this.repository.getTrack(id)
 
