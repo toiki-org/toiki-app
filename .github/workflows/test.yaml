@@ -1,0 +1,45 @@
+name: Test
+
+on:
+  push:
+    branches-ignore:
+      - "main" # all branches except main
+
+jobs:
+
+  test:
+    name: Test docker build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build client
+        uses: docker/build-push-action@v2
+        with:
+          tags: toiki-build
+          push: false
+          context: ./client
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
+          cache-to: type=inline
+          build-args: |
+            ARCH=linux/amd64
+            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
+
+      - name: Build server
+        uses: docker/build-push-action@v2
+        with:
+          tags: toiki-server
+          push: false
+          context: ./server
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-backend:latest
+          cache-to: type=inline
+
+      - name: Build bot
+        uses: docker/build-push-action@v2
+        with:
+          tags: toiki-bot
+          push: false
+          context: ./bot
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-bot:latest
+          cache-to: type=inline

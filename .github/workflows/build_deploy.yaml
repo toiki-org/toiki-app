@@ -1,4 +1,4 @@
-name: Test, Build & Deploy
+name: Build & Deploy
 
 on:
   push:
@@ -7,47 +7,26 @@ on:
 
 jobs:
 
-  test:
-    name: Test docker build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - name: Build client
-        uses: docker/build-push-action@v2
-        with:
-          tags: toiki-build
-          push: false
-          context: ./client
-          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
-          cache-to: type=inline
-          build-args: |
-            ARCH=linux/amd64
-            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
-
-      - name: Build server
-        uses: docker/build-push-action@v2
-        with:
-          tags: toiki-server
-          push: false
-          context: ./server
-          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-backend:latest
-          cache-to: type=inline
-
-      - name: Build bot
-        uses: docker/build-push-action@v2
-        with:
-          tags: toiki-bot
-          push: false
-          context: ./bot
-          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-bot:latest
-          cache-to: type=inline
-
   build:
-    needs: [test]
+    name: Build docker containers
     runs-on: ubuntu-latest
     steps:
+      - name: Filter paths
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            bot:
+              - 'bot/**'
+            server:
+              - 'server/**'
+            client:
+              - 'client/**'
+            nginx:
+              - 'nginx/**'
+            certbot:
+              - 'certbot/**'
+
       - name: Checkout
         uses: actions/checkout@v1
         with:
@@ -61,6 +40,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build toiki-build
+        if: steps.filter.outputs.client == 'true'
         uses: docker/build-push-action@v2
         with:
           tags: ghcr.io/toiki-org/toiki-build:latest
@@ -73,6 +53,7 @@ jobs:
             API_AUTHORITY=${{ secrets.API_AUTHORITY }}
 
       - name: Build & Publish toiki-nginx
+        if: steps.filter.outputs.client == 'true' || steps.filter.outputs.nginx == 'true'
         uses: docker/build-push-action@v2
         with:
           tags: ghcr.io/toiki-org/toiki-nginx:latest
@@ -82,6 +63,7 @@ jobs:
           cache-to: type=inline
 
       - name: Build & Publish toiki-backend
+        if: steps.filter.outputs.server == 'true'
         uses: docker/build-push-action@v2
         with:
           tags: ghcr.io/toiki-org/toiki-backend:latest
@@ -91,6 +73,7 @@ jobs:
           cache-to: type=inline
 
       - name: Build & Publish toiki-bot
+        if: steps.filter.outputs.bot == 'true'
         uses: docker/build-push-action@v2
         with:
           tags: ghcr.io/toiki-org/toiki-bot:latest
@@ -100,6 +83,7 @@ jobs:
           cache-to: type=inline
 
       - name: Build & Publish toiki-certbot
+        if: steps.filter.outputs.certbot == 'true'
         uses: docker/build-push-action@v2
         with:
           tags: ghcr.io/toiki-org/toiki-certbot:latest
