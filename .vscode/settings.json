@@ -1,4 +1,5 @@
 {
+  "editor.formatOnSave": true,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -18,6 +19,7 @@
     "Regexes",
     "spotify",
     "toiki",
+    "tsyringe",
     "Vinicius",
     "youtube",
     "Youtube"
