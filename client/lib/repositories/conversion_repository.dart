@@ -8,7 +8,7 @@ class ConversionRepository {
 
   Future<ConvertUrlResponse> convertUrl({required String url}) async {
     final res = await api.get(
-      path: '/api/convert-url',
+      path: '/api/convert',
       queryParameters: {
         'url': url,
       },
