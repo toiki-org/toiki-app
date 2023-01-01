@@ -20,7 +20,7 @@ class ConversionBloc extends Bloc<ConversionEvent, ConversionState> {
 
       final res = await conversionRepository.convertUrl(url: event.url);
 
-      emit(ConvertUrlDoneState(url: res.url));
+      emit(ConvertUrlDoneState(url: res.data.url));
     } catch (e) {
       emit(ConvertUrlErrorState());
     }

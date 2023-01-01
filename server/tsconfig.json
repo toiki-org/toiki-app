@@ -1,6 +1,10 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    // "strictPropertyInitialization": false,
+    "target": "ES5",
     "esModuleInterop": true,
     "lib": ["ES2020"],
     "moduleResolution": "Node",
