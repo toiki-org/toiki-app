@@ -19,8 +19,8 @@ export class SpotifyService {
 
   async initializeService() {
     await this.refreshToken()
-    // every 6 hours
-    setInterval(this.refreshToken.bind(this), 6 * 60 * 60 * 1000)
+    // every 50 minutes
+    setInterval(this.refreshToken.bind(this), 50 * 60 * 1000)
     this.logger.i('Spotify service initialized')
   }
 
