@@ -7,7 +7,7 @@ export class SpotifyService {
   private spotifyApi: SpotifyWebApi
 
   constructor() {
-    this.logger.i('initializing Spotify API...')
+    this.logger.i('initializing Spotify service...')
     this.spotifyApi = new SpotifyWebApi({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
@@ -18,9 +18,16 @@ export class SpotifyService {
   private logger = new Logger(SpotifyService.name)
 
   async initializeService() {
+    await this.refreshToken()
+    // every 6 hours
+    setInterval(this.refreshToken.bind(this), 6 * 60 * 60 * 1000)
+    this.logger.i('Spotify service initialized')
+  }
+
+  async refreshToken() {
     const response = await this.spotifyApi.clientCredentialsGrant()
     this.spotifyApi.setAccessToken(response.body.access_token)
-    this.logger.i('Spotify API initialized')
+    this.logger.i('Spotify access token refreshed')
   }
 
   readonly searchVideoId = async (query: string) => {
