@@ -60,7 +60,7 @@ export class ConversionService {
 
     const spotifyTrack = await this.spotifyService.getTrackInfo(id)
 
-    const artistsString = spotifyTrack.artists.join(', ')
+    const artistsString = spotifyTrack.artists.join(' ')
 
     const youtubeVideo = await this.youtubeService.searchVideoId(
       `${spotifyTrack.name} ${artistsString}`
