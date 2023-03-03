@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { Route, RequestMethod } from '../types/route'
+import { Route, RequestMethod } from '../interfaces/route'
 
 const fixPath = (path: string): string => {
   // remove leading and trailing slashes

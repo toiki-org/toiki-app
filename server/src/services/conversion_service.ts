@@ -1,16 +1,19 @@
 import { inject, injectable } from 'tsyringe'
 import HttpException from '../exceptions/http_exception'
+import { ISpotifyService } from '../interfaces/i_spotify_service'
+import { IYoutubeService } from '../interfaces/i_youtube_service'
 import { TYPES } from '../utils/constants'
-import { SpotifyService } from './spotify_service'
-import { YoutubeService } from './youtube_service'
+import { Logger } from '../utils/logger'
 
 @injectable()
 export class ConversionService {
+  private logger = new Logger(ConversionService.name)
+
   constructor(
     @inject(TYPES.SpotifyService)
-    private readonly spotifyService: SpotifyService,
+    private readonly spotifyService: ISpotifyService,
     @inject(TYPES.YoutubeService)
-    private readonly youtubeService: YoutubeService
+    private readonly youtubeService: IYoutubeService
   ) {}
 
   async convertYoutubeUrl(id: string) {

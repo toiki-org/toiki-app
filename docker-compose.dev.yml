@@ -18,6 +18,8 @@ services:
     build:
       context: server
       dockerfile: Dockerfile.dev
+    ports:
+      - 8000:8000
     restart: unless-stopped
     env_file: server/.env
     volumes:
@@ -25,5 +27,4 @@ services:
       - ignore:/app/dev/node_modules
 
 volumes:
-  ignore:
-  # bot_ignore:
+  ignore: # bot_ignore:
