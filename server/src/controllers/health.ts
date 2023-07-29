@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 import JSONResponse from '../utils/json_response'
-import BaseController from '../types/base_controller'
+import BaseController from '../interfaces/base_controller'
 import { Controller, Handler } from '../decorators/routing'
 import { injectable } from 'tsyringe'
 
