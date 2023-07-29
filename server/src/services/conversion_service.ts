@@ -33,7 +33,15 @@ export class ConversionService {
       throw new HttpException(400, 'Invalid Youtube track url')
     }
 
-    const spotifyResult = await this.spotifyService.searchVideoId(trackTitle)
+    const channelTitle = youtubeTrack.snippet?.channelTitle
+
+    if (!channelTitle) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const spotifyResult = await this.spotifyService.searchVideoId(
+      `${trackTitle} ${channelTitle}`
+    )
 
     const spotifyTrack = spotifyResult.tracks?.items[0]
 
@@ -55,8 +63,10 @@ export class ConversionService {
 
     const spotifyTrack = await this.spotifyService.getTrackInfo(id)
 
+    const artistsString = spotifyTrack.artists.join(' ')
+
     const youtubeVideo = await this.youtubeService.searchVideoId(
-      spotifyTrack.name
+      `${spotifyTrack.name} ${artistsString}`
     )
 
     const youtubeVideoId = youtubeVideo?.videoId
