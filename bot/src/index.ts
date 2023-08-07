@@ -2,18 +2,20 @@ import 'dotenv/config';
 import * as yup from 'yup';
 import {
   ActionRowBuilder,
-  BaseGuildTextChannel,
   ButtonBuilder,
   ButtonInteraction,
   ButtonStyle,
   Client,
-  Emoji,
-  Events,
   GatewayIntentBits,
   TextChannel
 } from 'discord.js';
 import { isYoutubeOrSpotify } from './utils/isYoutubeOrSpotify';
 import { convertUrl } from './api/convertUrl';
+import {
+  deleteAndReportHandler,
+  deleteHandler,
+  interactionButtons
+} from './lib/interactions';
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -57,14 +59,11 @@ client.on('ready', () => {
       const adjective = type === 'youtube' ? 'plebs' : 'gentlemen';
 
       const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setCustomId('delete')
-          .setLabel('Delete?')
-          .setStyle(ButtonStyle.Danger)
+        ...interactionButtons
       );
 
       await message.reply({
-        content: `Here's a ${type} link for the ${adjective}: ${convertedUrl}`,
+        content: `Here's a ${type} link for the ${adjective}:\n\n${convertedUrl}`,
         components: [buttons]
       });
     } catch (e) {
@@ -76,31 +75,15 @@ client.on('ready', () => {
     if (!(interaction instanceof ButtonInteraction)) {
       return;
     }
-    if (interaction.customId !== 'delete') {
+    if (!['delete', 'deleteAndReport'].includes(interaction.customId)) {
       return;
     }
-    if (
-      interaction.member?.user.id !==
-      interaction.message.mentions.members?.at(0)?.id
-    ) {
-      await interaction.reply({
-        content:
-          'Only the user that sent the link can ask for this message to be deleted.',
-        ephemeral: true
-      });
-      return;
+    switch (interaction.customId) {
+      case 'delete':
+        return deleteHandler(client, interaction);
+      case 'deleteAndReport':
+        return deleteAndReportHandler(client, interaction);
     }
-    if (!interaction.guildId) {
-      return;
-    }
-    const guild = client.guilds.cache.get(interaction.guildId);
-    const channel = guild?.channels.cache.get(interaction.channelId);
-    if (!(channel instanceof TextChannel)) {
-      return;
-    }
-    const message = channel.messages.cache.get(interaction.message.id);
-    if (!message) return;
-    await message.delete();
   });
 });
 
