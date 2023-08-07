@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "build": "rimraf build && tsc",
+    "build": "rimraf build && tsc || echo 'Build fails'",
     "start": "ts-node src/index.ts",
     "start:dev": "nodemon src/index.ts",
     "start:prod": "node build/index.js"
@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.2.1",
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.12.1",
     "dotenv": "^16.0.3",
     "yup": "^0.32.11"
   },

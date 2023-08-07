@@ -1,13 +1,13 @@
-FROM node:16-alpine as build
+FROM node:18-alpine as build
 WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN yarn build
 
 # stage to install only production deps
-FROM node:16-alpine as deps
+FROM node:18-alpine as deps
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json ./
@@ -15,7 +15,7 @@ COPY yarn.lock ./
 RUN yarn --frozen-lockfile --production
 
 ## this is stage two, where the app actually runs
-FROM node:16-alpine
+FROM node:18-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json ./

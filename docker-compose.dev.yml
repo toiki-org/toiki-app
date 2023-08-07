@@ -2,18 +2,18 @@ version: "3.7"
 
 services:
 
-  toiki_bot:
-    container_name: toiki_bot
-    build:
-      context: bot
-      dockerfile: Dockerfile.dev
-    restart: unless-stopped
-    env_file: bot/.env
-    networks:
-      - toiki_net
-    volumes:
-      - ./bot/:/app/dev:Z
-      - bot_ignore:/app/dev/node_modules
+  # toiki_bot:
+  #   container_name: toiki_bot
+  #   build:
+  #     context: bot
+  #     dockerfile: Dockerfile.dev
+  #   restart: unless-stopped
+  #   env_file: bot/.env
+  #   networks:
+  #     - toiki_net
+  #   volumes:
+  #     - ./bot/:/app/dev:Z
+  #     - bot_ignore:/app/dev/node_modules
 
   toiki_backend:
     container_name: toiki_backend
