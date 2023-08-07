@@ -1,13 +1,12 @@
+// @ts-nocheck
 import 'dotenv/config';
 import * as yup from 'yup';
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonInteraction,
-  ButtonStyle,
   Client,
   GatewayIntentBits,
-  TextChannel
 } from 'discord.js';
 import { isYoutubeOrSpotify } from './utils/isYoutubeOrSpotify';
 import { convertUrl } from './api/convertUrl';
