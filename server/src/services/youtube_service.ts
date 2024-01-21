@@ -33,11 +33,11 @@ export class YoutubeService implements IYoutubeService {
   }
 
   public readonly getTrackInfo = async (id: string) => {
-    const res = await this.youtubeApi.search
+    const res = await this.youtubeApi.videos
       .list({
-        auth: process.env.YOUTUBE_API_KEY,
+        id: [id],
         part: ['snippet'],
-        q: id,
+        auth: process.env.YOUTUBE_API_KEY,
         maxResults: 1,
       })
       .then((v) => v.data.items ?? [])
