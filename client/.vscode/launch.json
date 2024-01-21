@@ -8,7 +8,7 @@
       "name": "Toiki",
       "request": "launch",
       "type": "dart",
-      "args": ["-d", "chrome", "--web-port", "60852"]
+      "args": ["-d", "web-server", "--web-port", "60852"]
     },
     {
       "name": "Toiki (profile mode)",
