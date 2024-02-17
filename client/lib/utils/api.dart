@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:toiki/exceptions/http_bad_request_exception.dart';
 import 'package:toiki/exceptions/http_entity_not_found_exception.dart';
 import 'package:toiki/exceptions/http_missing_authorization_exception.dart';
-import 'package:toiki/utls/env.dart';
+import 'package:toiki/utils/env.dart';
 
 class Api {
   final _client = http.Client();

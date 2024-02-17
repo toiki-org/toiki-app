@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toiki/repositories/conversion_repository.dart';
-import 'package:toiki/utls/api.dart';
+import 'package:toiki/utils/api.dart';
 
 class RepositoryProviders extends StatelessWidget {
-  const RepositoryProviders({Key? key, required this.child}) : super(key: key);
+  const RepositoryProviders({
+    super.key,
+    required this.child,
+  });
 
   final Widget child;
 
