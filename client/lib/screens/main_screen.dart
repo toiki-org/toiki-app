@@ -5,6 +5,7 @@ import 'package:toiki/blocs/conversion/conversion_bloc.dart';
 import 'package:toiki/blocs/conversion/conversion_event.dart';
 import 'package:toiki/blocs/conversion/conversion_state.dart';
 import 'package:toiki/utls/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatelessWidget {
   MainScreen({Key? key}) : super(key: key);
@@ -83,15 +84,21 @@ class MainScreen extends StatelessWidget {
                   if (state is ConvertUrlDoneState) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 64),
-                      child: Center(
-                        child: IconButton(
-                          tooltip: 'Copy',
-                          icon: const Icon(Icons.copy),
-                          onPressed: () {
-                            _copy(text: state.url, context: context);
-                          },
+                      child: Column(children: [
+                        InkWell(
+                          onTap: () => launchUrl(Uri.parse(state.url)),
+                          child: Text(state.url),
                         ),
-                      ),
+                        Center(
+                          child: IconButton(
+                            tooltip: 'Copy',
+                            icon: const Icon(Icons.copy),
+                            onPressed: () {
+                              _copy(text: state.url, context: context);
+                            },
+                          ),
+                        ),
+                      ]),
                     );
                   }
 

@@ -1,6 +1,6 @@
 ARG ARCH=linux/amd64
 
-FROM --platform=${ARCH} dart:2.18
+FROM --platform=${ARCH} dart:3.3
 
 ARG API_AUTHORITY
 
