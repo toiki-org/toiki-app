@@ -1,5 +1,5 @@
 import 'package:toiki/models/convert_url_response.dart';
-import 'package:toiki/utls/api.dart';
+import 'package:toiki/utils/api.dart';
 
 class ConversionRepository {
   ConversionRepository({required this.api});

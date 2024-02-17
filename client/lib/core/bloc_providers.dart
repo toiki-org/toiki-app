@@ -4,7 +4,10 @@ import 'package:toiki/blocs/conversion/conversion_bloc.dart';
 import 'package:toiki/repositories/conversion_repository.dart';
 
 class BlocProviders extends StatelessWidget {
-  const BlocProviders({Key? key, required this.child}) : super(key: key);
+  const BlocProviders({
+    super.key,
+    required this.child,
+  });
 
   final Widget child;
 

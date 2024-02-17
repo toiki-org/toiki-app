@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toiki/blocs/conversion/conversion_bloc.dart';
 import 'package:toiki/blocs/conversion/conversion_event.dart';
 import 'package:toiki/blocs/conversion/conversion_state.dart';
-import 'package:toiki/utls/constants.dart';
+import 'package:toiki/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatelessWidget {
-  MainScreen({Key? key}) : super(key: key);
+  MainScreen({
+    super.key,
+  });
 
   static const route = '/';
 
