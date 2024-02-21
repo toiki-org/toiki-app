@@ -48,4 +48,39 @@ export class YoutubeService implements IYoutubeService {
 
     return res[0]
   }
+
+  public readonly searchAlbumId = async (query: string) => {
+    const res = await this.youtubeApi.search
+      .list({
+        auth: process.env.YOUTUBE_API_KEY,
+        part: ['snippet'],
+        q: query,
+        maxResults: 1,
+        type: ['playlist'],
+      })
+      .then((v) => v.data.items ?? [])
+
+    if (res.length === 0) {
+      return undefined
+    }
+
+    return res[0].id
+  }
+
+  public readonly getAlbumInfo = async (id: string) => {
+    const res = await this.youtubeApi.playlists
+      .list({
+        id: [id],
+        part: ['snippet'],
+        auth: process.env.YOUTUBE_API_KEY,
+        maxResults: 1,
+      })
+      .then((v) => v.data.items ?? [])
+
+    if (res.length === 0) {
+      return undefined
+    }
+
+    return res[0]
+  }
 }

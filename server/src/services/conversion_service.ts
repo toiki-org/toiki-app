@@ -4,6 +4,7 @@ import { ISpotifyService } from '../interfaces/i_spotify_service'
 import { IYoutubeService } from '../interfaces/i_youtube_service'
 import { TYPES } from '../utils/constants'
 import { Logger } from '../utils/logger'
+import { Match } from '../utils/is_youtube_or_spotify'
 
 @injectable()
 export class ConversionService {
@@ -16,7 +17,7 @@ export class ConversionService {
     private readonly youtubeService: IYoutubeService
   ) {}
 
-  async convertYoutubeUrl(id: string) {
+  async convertYoutubeTrack(id: string) {
     if (!id) {
       throw new HttpException(400, 'Invalid Youtube track url')
     }
@@ -56,7 +57,47 @@ export class ConversionService {
     return spotifyTrackUrl
   }
 
-  async convertSpotifyUrl(id: string) {
+  async convertYoutubeAlbum(id: string) {
+    if (!id) {
+      throw new HttpException(400, 'Invalid Youtube album url')
+    }
+
+    const youtubeAlbum = await this.youtubeService.getAlbumInfo(id)
+
+    if (youtubeAlbum === undefined) {
+      throw new HttpException(400, 'Invalid Youtube album url')
+    }
+
+    const albumTitle = youtubeAlbum.snippet?.title
+
+    if (!albumTitle) {
+      throw new HttpException(400, 'Invalid Youtube album url')
+    }
+
+    const channelTitle = youtubeAlbum.snippet?.channelTitle
+
+    if (!channelTitle) {
+      throw new HttpException(400, 'Invalid Youtube album url')
+    }
+
+    const spotifyResult = await this.spotifyService.searchAlbumId(
+      `${albumTitle} ${channelTitle}`
+    )
+
+    const spotifyAlbum = spotifyResult.albums?.items[0]
+
+    if (!spotifyAlbum) {
+      throw new HttpException(404, 'Album not found')
+    }
+
+    const spotifyAlbumId = spotifyAlbum.id
+
+    const spotifyAlbumUrl = `https://open.spotify.com/album/${spotifyAlbumId}`
+
+    return spotifyAlbumUrl
+  }
+
+  async convertSpotifyTrack(id: string) {
     if (!id) {
       throw new HttpException(400, 'Invalid Spotify track url')
     }
@@ -80,5 +121,31 @@ export class ConversionService {
     const youtubeVideoUrl = `https://www.youtube.com/watch?v=${youtubeVideo?.videoId}`
 
     return youtubeVideoUrl
+  }
+
+  async convertSpotifyAlbum(id: string) {
+    if (!id) {
+      throw new HttpException(400, 'Invalid Spotify album url')
+    }
+
+    const spotifyAlbum = await this.spotifyService.getAlbumInfo(id)
+
+    const artistsString = spotifyAlbum.artists
+      .map((artist) => artist.name)
+      .join(' ')
+
+    const youtubePlaylist = await this.youtubeService.searchAlbumId(
+      `${spotifyAlbum.name} ${artistsString}`
+    )
+
+    const youtubePlaylistId = youtubePlaylist?.playlistId
+
+    if (youtubePlaylistId === undefined || youtubePlaylistId === null) {
+      throw new HttpException(404, 'Youtube playlist not found')
+    }
+
+    const youtubePlaylistUrl = `https://www.youtube.com/playlist?list=${youtubePlaylistId}`
+
+    return youtubePlaylistUrl
   }
 }
