@@ -34,10 +34,20 @@ export default class ConvertController extends BaseController {
 
       let result: string
 
+      const id = matchResult.id
+
       if (matchResult.type === 'spotify') {
-        result = await this.conversionService.convertSpotifyUrl(matchResult.id)
+        if (matchResult.kind === 'album') {
+          result = await this.conversionService.convertSpotifyAlbum(id)
+        } else {
+          result = await this.conversionService.convertSpotifyTrack(id)
+        }
       } else {
-        result = await this.conversionService.convertYoutubeUrl(matchResult.id)
+        if (matchResult.kind === 'album') {
+          result = await this.conversionService.convertYoutubeAlbum(id)
+        } else {
+          result = await this.conversionService.convertYoutubeTrack(id)
+        }
       }
       JSONResponse.success(res, {
         url: result,
