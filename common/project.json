@@ -1,0 +1,19 @@
+{
+  "name": "common",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "common/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/common",
+        "main": "common/src/index.ts",
+        "tsConfig": "common/tsconfig.lib.json",
+        "assets": ["common/*.md"]
+      }
+    }
+  },
+  "tags": []
+}

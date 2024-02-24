@@ -5,7 +5,7 @@ import HttpException from '../exceptions/http_exception'
 
 type Kind = 'body' | 'query' | 'params'
 
-function validationMiddleware<T extends Object>(
+function validationMiddleware<T extends object>(
   kind: Kind,
   type: ClassConstructor<T>
 ): express.RequestHandler {

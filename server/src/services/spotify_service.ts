@@ -37,8 +37,20 @@ export class SpotifyService implements ISpotifyService {
     return res.body
   }
 
+  public readonly searchAlbumId = async (query: string) => {
+    const res = await this.spotifyApi.search(query, ['album'], { limit: 1 })
+
+    return res.body
+  }
+
   public readonly getTrackInfo = async (id: string) => {
     const res = await this.spotifyApi.getTrack(id)
+
+    return res.body
+  }
+
+  public readonly getAlbumInfo = async (id: string) => {
+    const res = await this.spotifyApi.getAlbum(id)
 
     return res.body
   }

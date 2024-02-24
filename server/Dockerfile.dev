@@ -1,7 +1,0 @@
-FROM node:18-alpine
-WORKDIR /app/dev
-COPY package.json ./
-COPY yarn.lock ./
-RUN yarn
-COPY . .
-CMD ["yarn", "start:dev"]

@@ -9,7 +9,7 @@ import { injectable } from 'tsyringe'
 @Controller()
 export default class HealthController extends BaseController {
   @Handler('get', '/health')
-  async health(req: Request, res: Response, next: NextFunction): Promise<any> {
+  async health(_req: Request, res: Response, _next: NextFunction): Promise<void> {
     JSONResponse.success(res, {
       message: 'Server running',
     })

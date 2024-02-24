@@ -20,6 +20,7 @@ export class App {
     @inject(TYPES.HealthController)
     healthController: HealthController
   ) {
+    console.log('app', convertController, healthController)
     this.app = express()
 
     this.initializeMiddleware()

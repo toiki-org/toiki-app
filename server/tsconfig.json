@@ -1,17 +1,16 @@
 {
-  "compileOnSave": true,
+  "extends": "../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
   "compilerOptions": {
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    // "strictPropertyInitialization": false,
-    "target": "ES5",
-    "esModuleInterop": true,
-    "lib": ["ES2020"],
-    "moduleResolution": "Node",
-    "outDir": "build/",
-    "sourceMap": true,
-    "strict": true
-  },
-  "exclude": ["build/", "node_modules/"],
-  "include": ["src/"]
+    "esModuleInterop": true
+  }
 }

@@ -1,11 +1,16 @@
 {
+  "extends": "../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
   "compilerOptions": {
-    "esModuleInterop": true,
-    "lib": ["ES2020"],
-    "target": "ES5",
-    "moduleResolution": "Node",
-    "outDir": "build/",
-    "strict": true
-  },
-  "include": ["src"]
+    "esModuleInterop": true
+  }
 }
