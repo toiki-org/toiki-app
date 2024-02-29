@@ -30,7 +30,6 @@ client.on('ready', () => {
   console.log('Bot is running!');
 
   client.on('messageCreate', async (message) => {
-    console.log('hello???')
     try {
       if (message.author.bot) return;
 
@@ -51,8 +50,6 @@ client.on('ready', () => {
 
       const urlMatchResult = isYoutubeOrSpotify(url);
 
-      console.log(urlMatchResult)
-      console.log(url)
       if (!urlMatchResult) return;
 
       const convertedUrl = await convertUrl(url);

@@ -11,6 +11,7 @@ import { inject, injectable } from 'tsyringe';
 import { TYPES } from '../utils/constants';
 import { ConversionService } from '../services/conversion_service';
 
+// ORDER IS IMPORTANT!!
 @injectable()
 @Controller()
 export default class ConvertController extends BaseController {
@@ -18,8 +19,6 @@ export default class ConvertController extends BaseController {
     @inject(TYPES.ConversionService)
     private readonly conversionService: ConversionService
   ) {
-    console.log('constructor brrr')
-    console.log(conversionService)
     super();
   }
 

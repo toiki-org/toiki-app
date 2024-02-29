@@ -13,7 +13,9 @@ interface Matcher {
 const matches: Matcher[] = [
   {
     regex: [
+      /* cspell:disable-next-line */
       /.*(youtu\.be|youtube.com|music.youtube.com)\/watch\?v=((\w|-)+)?(?=(&|$))/,
+      /* cspell:disable-next-line */
       /.*(youtu\.be|youtube.com)\/((?!playlist)(\w|-)+)?(?=(\?|$))/,
     ],
     idIndex: 2,
@@ -51,7 +53,6 @@ const matches: Matcher[] = [
 ];
 
 export const isYoutubeOrSpotify = (url: string): Match | null => {
-  console.log('brotherrrr')
   for (const matcher of matches) {
     const match = matcher.regex
       .map((regex) => url.match(regex))

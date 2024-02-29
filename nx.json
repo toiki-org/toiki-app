@@ -42,11 +42,6 @@
       "dependsOn": [
         "^build"
       ]
-    },
-    "serve": {
-      "dependsOn": [
-        "^build"
-      ]
     }
   },
   "plugins": [

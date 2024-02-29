@@ -19,7 +19,7 @@ export const Controller =
   // eslint-disable-next-line @typescript-eslint/ban-types
   <T extends { new (...args: any[]): {} }>(constructor: T) => {
     path = fixPath(path);
-    return class extends constructor {
+    const wrapper = class extends constructor {
       _name = constructor.name;
       _routes = routes[this._name];
       _path = path;
@@ -28,6 +28,9 @@ export const Controller =
         (this as any).mapRoutes();
       }
     };
+    // we need to copy over the metadata from the tsyringe decorator
+    Reflect.defineMetadata('injectionTokens', Reflect.getMetadata('injectionTokens', constructor), wrapper);
+    return wrapper;
   };
 
 export const Handler = (
