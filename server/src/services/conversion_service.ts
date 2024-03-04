@@ -1,6 +1,6 @@
-import { inject, injectable } from 'tsyringe'
-import HttpException from '../exceptions/http_exception'
-import { ISpotifyService } from '../interfaces/i_spotify_service'
+import { inject, injectable } from 'tsyringe';
+import HttpException from '../exceptions/http_exception';
+import { ISpotifyService } from '../interfaces/i_spotify_service';
 import { IYoutubeService } from '../interfaces/i_youtube_service';
 import { TYPES } from '../utils/constants';
 import { Logger } from '../utils/logger';
@@ -39,8 +39,10 @@ export class ConversionService {
       throw new HttpException(404, 'Track not found');
     }
     const spotifyTrackId = spotifyTrack.id;
-    const spotifyTrackUrl = `https://open.spotify.com/track/${spotifyTrackId}`;
-    return spotifyTrackUrl;
+    const url = `https://open.spotify.com/track/${spotifyTrackId}`;
+    const embedUrl = `https://open.spotify.com/embed/track/${spotifyTrackId}`;
+
+    return { url, embedUrl };
   }
 
   async convertYoutubeAlbum(id: string) {
@@ -78,9 +80,10 @@ export class ConversionService {
 
     const spotifyAlbumId = spotifyAlbum.id;
 
-    const spotifyAlbumUrl = `https://open.spotify.com/album/${spotifyAlbumId}`;
+    const url = `https://open.spotify.com/album/${spotifyAlbumId}`;
+    const embedUrl = `https://open.spotify.com/embed/album/${spotifyAlbumId}`;
 
-    return spotifyAlbumUrl;
+    return { url, embedUrl };
   }
 
   async convertSpotifyTrack(id: string) {
@@ -98,9 +101,10 @@ export class ConversionService {
     if (youtubeVideoId === undefined || youtubeVideoId === null) {
       throw new HttpException(404, 'Youtube video not found');
     }
-    const youtubeVideoUrl = `https://www.youtube.com/watch?v=${youtubeVideo?.videoId}`;
+    const url = `https://www.youtube.com/watch?v=${youtubeVideo?.videoId}`;
+    const embedUrl = `https://www.youtube.com/embed/${youtubeVideo?.videoId}`;
 
-    return youtubeVideoUrl;
+    return { url, embedUrl };
   }
 
   async convertSpotifyAlbum(id: string) {
@@ -124,8 +128,9 @@ export class ConversionService {
       throw new HttpException(404, 'Youtube playlist not found');
     }
 
-    const youtubePlaylistUrl = `https://www.youtube.com/playlist?list=${youtubePlaylistId}`;
+    const url = `https://www.youtube.com/playlist?list=${youtubePlaylistId}`;
+    const embedUrl = `https://www.youtube.com/embed/videoseries?list=${youtubePlaylistId}`;
 
-    return youtubePlaylistUrl;
+    return { url, embedUrl };
   }
 }

@@ -33,7 +33,7 @@ export default class ConvertController extends BaseController {
         return next(new HttpException(400, 'Invalid request params.'));
       }
 
-      let result: string;
+      let result: { url: string; embedUrl: string };
 
       const id = matchResult.id;
 
@@ -51,7 +51,8 @@ export default class ConvertController extends BaseController {
         }
       }
       JSONResponse.success(res, {
-        url: result,
+        url: result.url,
+        embedUrl: result.embedUrl
       });
     } catch (e) {
       if (e instanceof HttpException) {

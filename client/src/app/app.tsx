@@ -4,7 +4,10 @@ import { useState } from 'react';
 
 export function App() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [url, setUrl] = useState<null | string>('');
+  const [result, setResult] = useState<null | {
+    url: string;
+    embedUrl: string;
+  }>(null);
   const [error, setError] = useState<string>('');
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,8 +40,10 @@ export function App() {
           },
         }
       );
-      const data = (await res.json()) as { data: { url: string } };
-      setUrl(data.data.url);
+      const data = (await res.json()) as {
+        data: { url: string; embedUrl: string };
+      };
+      setResult(data.data);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -62,11 +67,11 @@ export function App() {
         </nav>
       </header>
       <div className="flex flex-1 justify-center items-center flex-col">
-        <form className="flex flex-col items-center" onSubmit={onSubmit}>
+        <form className="flex flex-col items-center w-full px-3" onSubmit={onSubmit}>
           <input
             type="text"
             name="url"
-            className="h-[50px] w-[500px] border-2 rounded border-solid border-black p-2 invalid:border-red-500"
+            className="h-[50px] max-w-[500px] w-full border-2 rounded border-solid border-black p-2 invalid:border-red-500"
             placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
             required
             onChange={(e) => {
@@ -96,17 +101,17 @@ export function App() {
         </form>
         <div className="h-5 mt-5">
           {error && <p className="text-red-500">{error}</p>}
-          {url && (
-            <div className="flex flex-col items-center">
+          {result && (
+            <div className="flex flex-col items-center w-full">
               Your URL is ready!
-              <div>
+              <div className="break-all">
                 <a
-                  href={url}
+                  href={result.url}
                   target="_blank"
                   rel="noreferrer"
                   className="text-blue-500"
                 >
-                  {url}
+                  {result.url}
                 </a>
               </div>
               <div className="mt-5">
@@ -114,18 +119,21 @@ export function App() {
                   type="button"
                   className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900 font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   onClick={() => {
-                    navigator.clipboard.writeText(url);
+                    navigator.clipboard.writeText(result.url);
                   }}
                 >
                   <ClipboardIcon
-                    className={`-ml-0.5 h-5 w-5 ${
-                      loading ? 'animate-spin' : ''
-                    }`}
+                    className="-ml-0.5 h-5 w-5"
                     aria-hidden="true"
                   />
                   Copy
                 </button>
               </div>
+              <iframe
+                src={result.embedUrl}
+                title="embed"
+                className="mt-5 w-full max-w-[500px] h-[300px]"
+              />
             </div>
           )}
         </div>
