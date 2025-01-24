@@ -1,20 +1,10 @@
-// @ts-nocheck
 import 'dotenv/config';
-import * as yup from 'yup';
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonInteraction,
-  Client,
-  GatewayIntentBits,
-} from 'discord.js';
-import { isYoutubeOrSpotify } from './utils/isYoutubeOrSpotify';
-import { convertUrl } from './api/convertUrl';
-import {
-  deleteAndReportHandler,
-  deleteHandler,
-  interactionButtons
-} from './lib/interactions';
+import { ButtonInteraction, Client, GatewayIntentBits, REST } from 'discord.js';
+import { deleteAndReportHandler, deleteHandler } from './lib/interactions';
+import { setupCommands } from './lib/rest';
+import { commands } from './lib/commands';
+import { processUrl } from './lib/core/processUrl';
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -25,9 +15,13 @@ const client = new Client({
 
 const token = process.env.TOKEN;
 
+const rest = new REST({ version: '10' }).setToken(token);
+
 console.log('Bot is starting...');
 client.on('ready', () => {
   console.log('Bot is running!');
+
+  setupCommands(rest, client.application!.id);
 
   client.on('messageCreate', async (message) => {
     try {
@@ -35,42 +29,28 @@ client.on('ready', () => {
 
       if (!message.guildId) return;
 
-      const url = message.content;
+      const res = await processUrl(message.content);
 
-      const isValid = yup
-        .object()
-        .shape({
-          url: yup.string().required().url()
-        })
-        .isValidSync({
-          url
-        });
+      if (res === undefined) return;
 
-      if (!isValid) return;
-
-      const urlMatchResult = isYoutubeOrSpotify(url);
-
-      if (!urlMatchResult) return;
-
-      const convertedUrl = await convertUrl(url);
-
-      const type = urlMatchResult.type === 'spotify' ? 'youtube' : 'spotify';
-      const adjective = type === 'youtube' ? 'plebs' : 'gentlemen';
-
-      const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        ...interactionButtons
-      );
-
-      await message.reply({
-        content: `Here's a ${type} link for the ${adjective}:\n\n${convertedUrl}`,
-        components: [buttons]
-      });
+      await message.reply(res);
     } catch (e) {
       console.error(e);
     }
   });
 
   client.on('interactionCreate', async (interaction) => {
+    if (interaction.isMessageContextMenuCommand()) {
+      if (interaction.commandName === commands.convertUrl.name) {
+        const res = await processUrl(interaction.targetMessage.content);
+
+        if (res === undefined) return;
+
+        await interaction.reply(res);
+      }
+
+      return;
+    }
     if (!(interaction instanceof ButtonInteraction)) {
       return;
     }
