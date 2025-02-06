@@ -1,5 +1,11 @@
 import 'dotenv/config';
-import { ButtonInteraction, Client, GatewayIntentBits, REST } from 'discord.js';
+import {
+  ButtonInteraction,
+  Client,
+  GatewayIntentBits,
+  Partials,
+  REST
+} from 'discord.js';
 import { deleteAndReportHandler, deleteHandler } from './lib/interactions';
 import { setupCommands } from './lib/rest';
 import { commands } from './lib/commands';
@@ -9,8 +15,10 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.DirectMessages
+  ],
+  partials: [Partials.Message, Partials.Channel]
 });
 
 const token = process.env.TOKEN;
