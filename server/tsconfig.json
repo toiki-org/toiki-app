@@ -10,7 +10,8 @@
     "moduleResolution": "Node",
     "outDir": "build/",
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "skipLibCheck": true
   },
   "exclude": ["build/", "node_modules/"],
   "include": ["src/"]
