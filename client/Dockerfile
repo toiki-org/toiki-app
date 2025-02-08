@@ -1,27 +1,16 @@
-ARG ARCH=linux/amd64
 
-FROM --platform=${ARCH} dart:3.3
-
-ARG API_AUTHORITY
-
-RUN apt-get update && apt-get install -y unzip wget xz-utils
-
-WORKDIR /usr
-
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-ENV PATH "$PATH:/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin"
-
-# Install webdev
-RUN flutter pub global activate webdev
-
-# Set the PATH environment variable for the webdev executable
-ENV PATH "$PATH:/root/.pub-cache/bin"
-
+FROM node:18-alpine as build
 WORKDIR /app
-
+COPY package.json ./
+COPY yarn.lock ./
+RUN yarn --frozen-lockfile
 COPY . .
+RUN yarn build
 
-RUN flutter pub get
-
-# Build the Flutter application for the web
-RUN flutter build web --release  --dart-define API_AUTHORITY=${API_AUTHORITY}
+FROM node:18-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package.json ./
+COPY yarn.lock ./
+COPY --from=build /app/dist ./dist/
+RUN ls -a
