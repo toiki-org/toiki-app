@@ -53,8 +53,12 @@ export class ConversionService {
     const spotifyTrackId = spotifyTrack.id
 
     const spotifyTrackUrl = `https://open.spotify.com/track/${spotifyTrackId}`
+    const spotifyEmbedUrl = `https://open.spotify.com/embed/track/${spotifyTrackId}`
 
-    return spotifyTrackUrl
+    return {
+      url: spotifyTrackUrl,
+      embedUrl: spotifyEmbedUrl,
+    }
   }
 
   async convertYoutubeAlbum(id: string) {
@@ -93,8 +97,12 @@ export class ConversionService {
     const spotifyAlbumId = spotifyAlbum.id
 
     const spotifyAlbumUrl = `https://open.spotify.com/album/${spotifyAlbumId}`
+    const spotifyEmbedUrl = `https://open.spotify.com/embed/album/${spotifyAlbumId}`
 
-    return spotifyAlbumUrl
+    return {
+      url: spotifyAlbumUrl,
+      embedUrl: spotifyEmbedUrl,
+    }
   }
 
   async convertSpotifyTrack(id: string) {
@@ -119,8 +127,12 @@ export class ConversionService {
     }
 
     const youtubeVideoUrl = `https://www.youtube.com/watch?v=${youtubeVideo?.videoId}`
+    const youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideo?.videoId}`
 
-    return youtubeVideoUrl
+    return {
+      url: youtubeVideoUrl,
+      embedUrl: youtubeEmbedUrl,
+    }
   }
 
   async convertSpotifyAlbum(id: string) {
@@ -145,7 +157,11 @@ export class ConversionService {
     }
 
     const youtubePlaylistUrl = `https://www.youtube.com/playlist?list=${youtubePlaylistId}`
+    const youtubeEmbedUrl = `https://www.youtube.com/embed?listType=playlist&list=${youtubePlaylistId}`
 
-    return youtubePlaylistUrl
+    return {
+      url: youtubePlaylistUrl,
+      embedUrl: youtubeEmbedUrl,
+    }
   }
 }
