@@ -4,6 +4,7 @@ import { isYoutubeOrSpotify } from './utils/isYoutubeOrSpotify';
 
 export function App() {
   const [loading, setLoading] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
   const [result, setResult] = useState<null | {
     url: string;
     embedUrl: string;
@@ -92,7 +93,7 @@ export function App() {
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-70"
+              className="inline-flex cursor-pointer items-center gap-x-1.5 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-70"
             >
               <ArrowPathIcon
                 className={`-ml-0.5 h-5 w-5 ${loading ? 'animate-spin' : ''}`}
@@ -117,19 +118,27 @@ export function App() {
                   {result.url}
                 </a>
               </div>
-              <div className="mt-5">
+              <div className="mt-5 flex items-center gap-x-2">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900 font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  className={`inline-flex cursor-pointer transition-colors duration-200 items-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 ${
+                    copied ? 'bg-green-400' : 'bg-white hover:bg-gray-50'
+                  }`}
                   onClick={() => {
                     navigator.clipboard.writeText(result.url);
+                    if (!copied) {
+                      setCopied(true);
+                      setTimeout(() => {
+                        setCopied(false);
+                      }, 2000);
+                    }
                   }}
                 >
                   <ClipboardIcon
                     className="-ml-0.5 h-5 w-5"
                     aria-hidden="true"
                   />
-                  Copy
+                  {copied ? 'Copied!' : 'Copy'}
                 </button>
               </div>
               <iframe

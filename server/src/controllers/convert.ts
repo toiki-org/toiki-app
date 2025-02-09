@@ -32,7 +32,7 @@ export default class ConvertController extends BaseController {
         return next(new HttpException(400, 'Invalid request params.'))
       }
 
-      let result: string
+      let result: { url: string; embedUrl: string }
 
       const id = matchResult.id
 
@@ -49,9 +49,7 @@ export default class ConvertController extends BaseController {
           result = await this.conversionService.convertYoutubeTrack(id)
         }
       }
-      JSONResponse.success(res, {
-        url: result,
-      })
+      JSONResponse.success(res, result)
     } catch (e) {
       if (e instanceof HttpException) {
         next(e)
