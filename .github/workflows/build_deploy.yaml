@@ -23,14 +23,19 @@ jobs:
           filters: |
             bot:
               - 'bot/**'
+              - '.github/**'
             server:
               - 'server/**'
+              - '.github/**'
             client:
               - 'client/**'
+              - '.github/**'
             nginx:
               - 'nginx/**'
+              - '.github/**'
             certbot:
               - 'certbot/**'
+              - '.github/**'
 
       - name: Login to DockerHub
         uses: docker/login-action@v1 
