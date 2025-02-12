@@ -54,7 +54,6 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
           cache-to: type=inline
           build-args: |
-            ARCH=linux/amd64
             VITE_API_URL=${{ secrets.API_URL }}
 
       - name: Build & Publish toiki-nginx
