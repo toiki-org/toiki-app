@@ -50,7 +50,7 @@ jobs:
           cache-to: type=inline
           build-args: |
             ARCH=linux/amd64
-            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
+            VITE_API_URL=${{ secrets.API_URL }}
 
       - name: Build & Publish toiki-nginx
         if: steps.filter.outputs.client == 'true' || steps.filter.outputs.nginx == 'true'

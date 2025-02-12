@@ -24,7 +24,7 @@ jobs:
           cache-to: type=inline
           build-args: |
             ARCH=linux/amd64
-            API_AUTHORITY=${{ secrets.API_AUTHORITY }}
+            VITE_API_URL=${{ secrets.API_URL }}
 
       - name: Build server
         uses: docker/build-push-action@v2
