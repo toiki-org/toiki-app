@@ -51,6 +51,7 @@ jobs:
           tags: ghcr.io/toiki-org/toiki-build:latest
           push: true
           context: ./client
+          no-cache: true
           # cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
           # cache-to: type=inline
           build-args: |
