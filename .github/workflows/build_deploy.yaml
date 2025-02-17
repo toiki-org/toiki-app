@@ -23,19 +23,19 @@ jobs:
           filters: |
             bot:
               - 'bot/**'
-              - '.github/**'
+              - '.github/workflows/**'
             server:
               - 'server/**'
-              - '.github/**'
+              - '.github/workflows/**'
             client:
               - 'client/**'
-              - '.github/**'
+              - '.github/workflows/**'
             nginx:
               - 'nginx/**'
-              - '.github/**'
+              - '.github/workflows/**'
             certbot:
               - 'certbot/**'
-              - '.github/**'
+              - '.github/workflows/**'
 
       - name: Login to DockerHub
         uses: docker/login-action@v1 
@@ -54,8 +54,8 @@ jobs:
           no-cache: true
           # cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
           # cache-to: type=inline
-          secrets: |
-            "VITE_API_URL='https://api.toiki.elbarae.me'"
+          build-args: |
+            VITE_API_URL=${{ secrets.API_URL }}
 
       - name: Build & Publish toiki-nginx
         if: steps.filter.outputs.client == 'true' || steps.filter.outputs.nginx == 'true'
