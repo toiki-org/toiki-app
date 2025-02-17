@@ -54,8 +54,8 @@ jobs:
           no-cache: true
           # cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-build:latest
           # cache-to: type=inline
-          build-args: |
-            VITE_API_URL='https://api.toiki.elbarae.me'
+          build-secrets: |
+            "VITE_API_URL='https://api.toiki.elbarae.me'"
 
       - name: Build & Publish toiki-nginx
         if: steps.filter.outputs.client == 'true' || steps.filter.outputs.nginx == 'true'
