@@ -4,7 +4,6 @@ import { ISpotifyService } from '../interfaces/i_spotify_service'
 import { IYoutubeService } from '../interfaces/i_youtube_service'
 import { TYPES } from '../utils/constants'
 import { Logger } from '../utils/logger'
-import { Match } from '../utils/is_youtube_or_spotify'
 
 @injectable()
 export class ConversionService {

@@ -26,6 +26,7 @@
     "morgan": "^1.10.0",
     "reflect-metadata": "^0.1.13",
     "spotify-web-api-node": "^5.0.2",
+    "toiki-common": "../common",
     "tsyringe": "^4.7.0",
     "yup": "^0.32.11"
   },

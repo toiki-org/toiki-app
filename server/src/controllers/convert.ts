@@ -9,7 +9,7 @@ import ConvertInput from '../interfaces/convert_input'
 import { inject, injectable } from 'tsyringe'
 import { TYPES } from '../utils/constants'
 import { ConversionService } from '../services/conversion_service'
-import { isYoutubeOrSpotify } from '../utils/is_youtube_or_spotify'
+import { isYoutubeOrSpotify } from 'toiki-common'
 
 @injectable()
 @Controller()
