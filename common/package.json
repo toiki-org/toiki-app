@@ -1,0 +1,24 @@
+{
+  "name": "toiki-common",
+  "version": "1.0.0",
+  "description": "Toiki common library",
+  "repository": "https://github.com/toiki-org/toiki-app",
+  "license": "MIT",
+  "main": "build/index.js",
+  "module": "build/index.js",
+  "files": [
+    "build"
+  ],
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build-watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

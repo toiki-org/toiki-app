@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { isYoutubeOrSpotify } from '../../utils/isYoutubeOrSpotify';
+import { isYoutubeOrSpotify } from 'toiki-common';
 import { convertUrl } from '../../api/convertUrl';
 import { ActionRowBuilder, ButtonBuilder } from 'discord.js';
 import { interactionButtons } from '../interactions';

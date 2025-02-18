@@ -1040,6 +1040,10 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
+toiki-common@../common:
+  version "1.0.0"
+  resolved "file:../common"
+
 ts-api-utils@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/ts-api-utils/-/ts-api-utils-2.0.1.tgz"

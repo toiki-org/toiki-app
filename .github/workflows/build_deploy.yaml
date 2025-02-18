@@ -23,12 +23,15 @@ jobs:
           filters: |
             bot:
               - 'bot/**'
+              - 'common/**'
               - '.github/workflows/**'
             server:
               - 'server/**'
+              - 'common/**'
               - '.github/workflows/**'
             client:
               - 'client/**'
+              - 'common/**'
               - '.github/workflows/**'
             nginx:
               - 'nginx/**'
@@ -43,6 +46,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build toiki-common
+        if: steps.filter.outputs.common == 'true'
+        uses: docker/build-push-action@v2
+        with:
+          tags: ghcr.io/toiki-org/toiki-common:latest
+          push: true
+          context: ./common
+          cache-from: type=registry,ref=ghcr.io/toiki-org/toiki-common:latest
+          cache-to: type=inline
 
       - name: Build toiki-build
         if: steps.filter.outputs.client == 'true'

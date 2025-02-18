@@ -16,6 +16,7 @@
     "axios": "^1.6.7",
     "discord.js": "^14.12.1",
     "dotenv": "^16.0.3",
+    "toiki-common": "../common",
     "yup": "^0.32.11"
   },
   "devDependencies": {

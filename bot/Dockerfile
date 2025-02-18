@@ -1,5 +1,10 @@
-FROM node:18-alpine as build
+ARG COMMON_IMAGE=ghcr.io/toiki-org/toiki-common:latest
+
+FROM $COMMON_IMAGE as common
+
+FROM node:20-alpine as build
 WORKDIR /app
+COPY --from=common /app /common
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn --frozen-lockfile
@@ -9,6 +14,7 @@ RUN yarn build
 # stage to install only production deps
 FROM node:18-alpine as deps
 WORKDIR /app
+COPY --from=common /app /common
 ENV NODE_ENV=production
 COPY package.json ./
 COPY yarn.lock ./

@@ -1,6 +1,6 @@
 import { ArrowPathIcon, ClipboardIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
-import { isYoutubeOrSpotify } from './utils/isYoutubeOrSpotify';
+import { isYoutubeOrSpotify } from 'toiki-common';
 
 export function App() {
   const [loading, setLoading] = useState<boolean>(false);
