@@ -7,12 +7,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\index.ts",
-      "preLaunchTask": "tsc: build - tsconfig.json",
-      "outFiles": ["${workspaceFolder}/build/**/*.js"],
-      "envFile": "${workspaceFolder}/.env"
-    }
-  ]
+      "name": "Launch Server",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/server/src/index.ts",
+      "preLaunchTask": "tsc: build - server/tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/server/build/**/*.js"
+      ],
+      "envFile": "${workspaceFolder}/server/.env",
+    },
+  ],
 }

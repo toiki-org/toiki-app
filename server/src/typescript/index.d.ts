@@ -3,6 +3,7 @@ export {}
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      GOOGLE_SEARCH_ENGINE_CX?: string
       HOST_URL?: string
       NODE_ENV: 'development' | 'production'
       PORT?: string

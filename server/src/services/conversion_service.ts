@@ -4,12 +4,15 @@ import { ISpotifyService } from '../interfaces/i_spotify_service'
 import { IYoutubeService } from '../interfaces/i_youtube_service'
 import { TYPES } from '../utils/constants'
 import { Logger } from '../utils/logger'
+import { IGooglesearchService } from '../interfaces/i_googlesearch_service'
 
 @injectable()
 export class ConversionService {
-  private logger = new Logger(ConversionService.name)
+  private readonly logger = new Logger(ConversionService.name)
 
   constructor(
+    @inject(TYPES.GooglesearchService)
+    private readonly googlesearchService: IGooglesearchService,
     @inject(TYPES.SpotifyService)
     private readonly spotifyService: ISpotifyService,
     @inject(TYPES.YoutubeService)
@@ -39,24 +42,44 @@ export class ConversionService {
       throw new HttpException(400, 'Invalid Youtube track url')
     }
 
-    const spotifyResult = await this.spotifyService.searchVideoId(
-      `${trackTitle} ${channelTitle}`
+    const query = `spotify - ${channelTitle.replace(
+      ' - Topic',
+      ''
+    )} - ${trackTitle}`
+
+    const results = await this.googlesearchService.search(
+      query,
+      'https://open.spotify.com/track'
     )
 
-    const spotifyTrack = spotifyResult.tracks?.items[0]
-
-    if (!spotifyTrack) {
+    if (results.length === 0) {
       throw new HttpException(404, 'Track not found')
     }
 
-    const spotifyTrackId = spotifyTrack.id
+    const track = results[0]
+
+    const spotifyUrlMatch = track.link?.match(
+      /https:\/\/open.spotify.com\/track\/(\w+)/
+    )
+    if (!spotifyUrlMatch) {
+      throw new HttpException(400, 'Invalid Spotify track url')
+    }
+
+    const spotifyTrackId = spotifyUrlMatch[1]
 
     const spotifyTrackUrl = `https://open.spotify.com/track/${spotifyTrackId}`
     const spotifyEmbedUrl = `https://open.spotify.com/embed/track/${spotifyTrackId}`
 
+    const metadataMatch = track.title?.match(
+      /^(.+) - song and lyrics by (.+) \| Spotify$/
+    )
+
     return {
-      url: spotifyTrackUrl,
+      artist: !metadataMatch ? '' : metadataMatch[2],
       embedUrl: spotifyEmbedUrl,
+      query,
+      title: !metadataMatch ? '' : metadataMatch[1],
+      url: spotifyTrackUrl,
     }
   }
 
