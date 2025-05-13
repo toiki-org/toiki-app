@@ -9,6 +9,7 @@ declare global {
       PORT?: string
       SPOTIFY_CLIENT_ID?: string
       SPOTIFY_CLIENT_SECRET?: string
+      USE_CONVERSION_V2?: string
       YOUTUBE_API_KEY?: string
     }
   }

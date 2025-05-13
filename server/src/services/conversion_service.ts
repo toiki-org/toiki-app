@@ -42,6 +42,51 @@ export class ConversionService {
       throw new HttpException(400, 'Invalid Youtube track url')
     }
 
+    const query = `${channelTitle.replace(' - Topic', '')} - ${trackTitle}`
+
+    const spotifyResult = await this.spotifyService.searchVideoId(query)
+
+    const spotifyTrack = spotifyResult.tracks?.items[0]
+
+    if (!spotifyTrack) {
+      throw new HttpException(404, 'Track not found')
+    }
+
+    const spotifyTrackId = spotifyTrack.id
+
+    const spotifyTrackUrl = `https://open.spotify.com/track/${spotifyTrackId}`
+    const spotifyEmbedUrl = `https://open.spotify.com/embed/track/${spotifyTrackId}`
+
+    return {
+      embedUrl: spotifyEmbedUrl,
+      query,
+      url: spotifyTrackUrl,
+    }
+  }
+
+  async convertYoutubeTrackV2(id: string) {
+    if (!id) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const youtubeTrack = await this.youtubeService.getTrackInfo(id)
+
+    if (youtubeTrack === undefined) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const trackTitle = youtubeTrack.snippet?.title
+
+    if (!trackTitle) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const channelTitle = youtubeTrack.snippet?.channelTitle
+
+    if (!channelTitle) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
     const query = `spotify - ${channelTitle.replace(
       ' - Topic',
       ''
@@ -61,14 +106,10 @@ export class ConversionService {
     const spotifyUrlMatch = track.link?.match(
       /https:\/\/open.spotify.com\/track\/(\w+)/
     )
+
     if (!spotifyUrlMatch) {
       throw new HttpException(400, 'Invalid Spotify track url')
     }
-
-    const spotifyTrackId = spotifyUrlMatch[1]
-
-    const spotifyTrackUrl = `https://open.spotify.com/track/${spotifyTrackId}`
-    const spotifyEmbedUrl = `https://open.spotify.com/embed/track/${spotifyTrackId}`
 
     const metadataMatch = track.title?.match(
       /^(.+) - song and lyrics by (.+) \| Spotify$/
@@ -76,10 +117,10 @@ export class ConversionService {
 
     return {
       artist: !metadataMatch ? '' : metadataMatch[2],
-      embedUrl: spotifyEmbedUrl,
+      embedUrl: `https://open.spotify.com/embed/track/${spotifyUrlMatch[1]}`,
       query,
       title: !metadataMatch ? '' : metadataMatch[1],
-      url: spotifyTrackUrl,
+      url: `https://open.spotify.com/track/${spotifyUrlMatch[1]}`,
     }
   }
 

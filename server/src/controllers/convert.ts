@@ -46,7 +46,11 @@ export default class ConvertController extends BaseController {
         if (matchResult.kind === 'album') {
           result = await this.conversionService.convertYoutubeAlbum(id)
         } else {
-          result = await this.conversionService.convertYoutubeTrack(id)
+          if (process.env.USE_CONVERSION_V2 === 'true') {
+            result = await this.conversionService.convertYoutubeTrackV2(id)
+          } else {
+            result = await this.conversionService.convertYoutubeTrack(id)
+          }
         }
       }
       JSONResponse.success(res, result)
