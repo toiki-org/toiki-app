@@ -4,12 +4,15 @@ import { ISpotifyService } from '../interfaces/i_spotify_service'
 import { IYoutubeService } from '../interfaces/i_youtube_service'
 import { TYPES } from '../utils/constants'
 import { Logger } from '../utils/logger'
+import { IGooglesearchService } from '../interfaces/i_googlesearch_service'
 
 @injectable()
 export class ConversionService {
-  private logger = new Logger(ConversionService.name)
+  private readonly logger = new Logger(ConversionService.name)
 
   constructor(
+    @inject(TYPES.GooglesearchService)
+    private readonly googlesearchService: IGooglesearchService,
     @inject(TYPES.SpotifyService)
     private readonly spotifyService: ISpotifyService,
     @inject(TYPES.YoutubeService)
@@ -39,9 +42,9 @@ export class ConversionService {
       throw new HttpException(400, 'Invalid Youtube track url')
     }
 
-    const spotifyResult = await this.spotifyService.searchVideoId(
-      `${trackTitle} ${channelTitle}`
-    )
+    const query = `${channelTitle.replace(' - Topic', '')} - ${trackTitle}`
+
+    const spotifyResult = await this.spotifyService.searchVideoId(query)
 
     const spotifyTrack = spotifyResult.tracks?.items[0]
 
@@ -55,8 +58,69 @@ export class ConversionService {
     const spotifyEmbedUrl = `https://open.spotify.com/embed/track/${spotifyTrackId}`
 
     return {
-      url: spotifyTrackUrl,
       embedUrl: spotifyEmbedUrl,
+      query,
+      url: spotifyTrackUrl,
+    }
+  }
+
+  async convertYoutubeTrackV2(id: string) {
+    if (!id) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const youtubeTrack = await this.youtubeService.getTrackInfo(id)
+
+    if (youtubeTrack === undefined) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const trackTitle = youtubeTrack.snippet?.title
+
+    if (!trackTitle) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const channelTitle = youtubeTrack.snippet?.channelTitle
+
+    if (!channelTitle) {
+      throw new HttpException(400, 'Invalid Youtube track url')
+    }
+
+    const query = `spotify - ${channelTitle.replace(
+      ' - Topic',
+      ''
+    )} - ${trackTitle}`
+
+    const results = await this.googlesearchService.search(
+      query,
+      'https://open.spotify.com/track'
+    )
+
+    if (results.length === 0) {
+      throw new HttpException(404, 'Track not found')
+    }
+
+    const track = results[0]
+
+    const spotifyUrlMatch = track.link?.match(
+      /https:\/\/open.spotify.com\/track\/(\w+)/
+    )
+
+    if (!spotifyUrlMatch) {
+      throw new HttpException(400, 'Invalid Spotify track url')
+    }
+
+    const metadataMatch = track.title?.match(
+      /^(.+) - song and lyrics by (.+) \| Spotify$/
+    )
+
+    return {
+      artist: !metadataMatch ? '' : metadataMatch[2],
+      embedUrl: `https://open.spotify.com/embed/track/${spotifyUrlMatch[1]}`,
+      query,
+      title: !metadataMatch ? '' : metadataMatch[1],
+      url: `https://open.spotify.com/track/${spotifyUrlMatch[1]}`,
     }
   }
 
